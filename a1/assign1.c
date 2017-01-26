@@ -56,8 +56,44 @@
  *
  *********************************************************************/
 
+// selection sort because its fast for small arrays of ints
+void intselectsort(int *a,int n)
+{
+  for(int i=0; i<n-1; i++) {
+    int max = i; //sort in descending order so we use max instead of min
+
+    for(int j=i+1; j < n; j++) {
+      if(a[j] > a[max]) {
+        max = j;
+      }
+    }
+
+    if(max != i) {
+      //swap two ints
+      int temp = a[i];
+      a[i] = a[max];
+      a[max] = temp;
+    }
+  }
+
+  return;
+}
+
 unsigned long byte_sort(unsigned long arg) {
-  return 0;
+  int bytes [8];
+  for(int i=0; i < 8; i++) {
+    bytes[i] = (arg >> (8*i)) & 0xff;
+  }
+
+  intselectsort(bytes,8);
+
+  unsigned long output = 0;
+  for(int i=0; i < 8; i++) {
+    output = output << 8;
+    output += bytes[i];
+  }
+
+  return output;
 }
 
 /*********************************************************************
@@ -77,7 +113,20 @@ unsigned long byte_sort(unsigned long arg) {
  *********************************************************************/
 
 unsigned long nibble_sort(unsigned long arg) {
-  return 0;
+  int chunks [16];
+  for(int i=0; i < 16; i++) {
+    chunks[i] = (arg >> (4*i)) & 0xf;
+  }
+
+  intselectsort(chunks,16);
+
+  unsigned long output = 0;
+  for(int i=0; i < 16; i++) {
+    output = output << 4;
+    output += chunks[i];
+  }
+
+  return output;
 }
 
 /*********************************************************************
