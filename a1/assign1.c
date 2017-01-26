@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <sys/syscall.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 /*********************************************************************
  *
@@ -221,6 +222,8 @@ enum format_t {
 void convert(enum format_t mode, unsigned long value){
   int *output;
   int n;
+
+  // TODO: cleanup redundant code
   if(mode == OCT) {
     n = 22;
     output = malloc(sizeof(int)*n);
@@ -252,9 +255,9 @@ void convert(enum format_t mode, unsigned long value){
   for(int i = n-1; i >= 0; i--) {
     int a = output[i];
     if(a>9){
-      a += 55;
+      a += 55; // to get a-f for hex
     } else {
-      a += 48;
+      a += 48; // 0-9
     }
 
     putc(a,stdout);
@@ -293,4 +296,7 @@ void convert(enum format_t mode, unsigned long value){
  *********************************************************************/
 
 void draw_me(void){
+  int fd = open("me.txt", O_RDWR | O_APPEND | O_CREAT, 0777);
+  write(fd,"--------------:::-----------:+---------:+ddhso++///ydddhyssyyhhhyhhddyooooshds+/\n...-----------:::-..--------:/------:/oshdddddddhhyhdddhyyyyyhhhyyhddyooooshdo+/\n...-----------::-.....------//---:/shhddddmmmmmmmdddddhhyyyyhdhyyydddyoooosddo+:\n...------------:-.......----+/-:ohddmmmmmmmmmmmmmmmdddddhhhhddhhhhhddsooossdh+/:\n...-----------::.........---++sdmmmmmmmmmdddddddddddddddddddddhhhhhddsooosydy+/:\n......--------::.........--/ydmmmmmdhysoo++++++++oossyhmmmmmmddhhhddhsoossydy+/:\n......--------:-.........:shdmmdho+/:::::::///////+++oosydmmmmmdhhhdhsoosshds+/:\n.....---------:-.......-/ydmmdy/----:::::::://////++++++ooydmmmmdddhhysssshdo+::\n......--------:-......-+ydmmh+-....------:::://////++++++ooshdmmmdddhsssssddo+::\n.....---------:......-+shmmh+:-....------:::::://////+++++ooshdmmmmdhysssydho+:-\n......--------:.....-+shmmh+:-......-------::::://////+++++ooshmmmmddhsssydyo/:-\n......--------:....-+sydmds:....``..----::::::://+ooossoo+++ooydmmmmdhyyyydso/:-\n.......------::...:osydmmh+-..``..--:::::::::/+oyyyssssssssoooshmmmmmdhyyhdso/:-\n........-----:-..-osyhdmmy/--:/+oo+//:::::///++o+++/////+++oooosdmmmmmdhyhds+/--\n........-----/..-+syhdmmds//+++++++++//:::///++//::://+++++++++ohmmmmmmdhhhs+:--\n.........---:/.-+osyddmmds:-...-:://///:-:://++//++oossssoo++++osdmNmmmdddhs+:--\n........----:/-+osyhddmmd+-----:/++++/:-..://+++syyhhddhhhhso+++oymNNmmmddhs/::-\n........----://osyhdyo/+s+::/osyhhdhs/-...://////++ooooooo+++++++odmNmmmddys/:--\n..........--/+ossyhdy/-:/+/sssssssso+-....:/+///:::////////////++ohmmNmmmdys+:--\n.........-:/++osyhhdh:.-///:://+++/:-.--..-:/++//:------::://///++hmmmmmmdhs+:--\n........-:/++oosyhdds:-://:.......--.--.`.-:/+oo+/:-----:::////++oydmdmmmmds+:--\n........://+oooshhdy/::://:.......--:----:://++++o/::-:::::////++oyddddmmmdso:--\n.......-//+ooooshhy:-:////-....---://-/+++++oys++oo+/::://////+++oyhddmmmmhs+:--\n.......-//+osooyhy:-:://+/------::////oyyooooosooo++////////++++ooyhddmmmmho+:--\n.......-++osso+ys:---::::::::::////:--/+++++++++++++++//++++++++ooyhhdmmmmyo+---\n.......-/ooss+:-.....`..-:////+++++/:---::///+++++++++o+++++++++ooyhhmmmmdyo+---\n........:oo+:..........-::///+++++++o+//+oooosssssooosso++++++++osdhmNNmmdso+---\n........:+++:-............--:/++++ooo++yhhyyyyyyhyyyyso+++++++++ohNmNNmmmdo+/---\n......-/+++++/:............-://+osyso+oso++oosssssoooo+++++++++osmNNNNmmmd++/---\n...-:/+oooosso+:.........-://+++++ooo+++oooooooo+++++++++++++oosdNNNNmmmmh+//---\n///+oooosssssso+/-.....--::/++++++++ooooossssoooo+++++++++ooooymNNNNNmmmmh//:--.\n++ooooooooooooooo+:---------:/++ooooooooosssoooo+++++++++ooosdNNNNNNNmmmmh//::-.\nooooooooooooooooooo+::------://+++oosoo++++++++++++++oooosshmNNNNNNNNNmmmds/::-.\nooooo+oooooooosyhhys+/:::::///+++++oossoooooooooo+oooossyhdNNNNNNNNNNNNmmdho/:--\noooooooosssyyyyyyyysso+/:::///++ooo+oyhhyyysssssssssyyhhhdmNNNNNNNNNNNmmmddy//:-\nossssssyyyyyyyyssyyyyys+:---://++++oohmmmddhhhhhhhhhhhhhhdNNNNNNNNNNNNNmmmmds+::\nsyyyyyyyyyyysyyyyhhyhhhy+::::/++++ooosdmmddhhhhyyyyyyyyhhmNNNNNNNNNNNNNNNNmmmmhs\nyhyyyyhhyyyssyyyhhhhhdddhs++++ooooosydmmddhhyyyyyyyyyyyhdmNNNNNNNNNNNNNNNNNNNmmm\nyyyyyyyyyyyyhhhhhddmmmdmddyssshdddmmmmmdddhhyyyyyyyyyyyhdNNNNNNNNNNNNNNNNNNNNNNN\nhhhhhhhhhhdddhdddddmdmmmmmddmNNNNNNNNNmdddhhyyyyyyyyyhhdmNNNNNNNNNNNNNNNNNNNNNNN\ndddhdddddddddddmmmmdmmmmmmmmmdmmNNNMMNNNmddhhyyyhhhhddmNNNNMMMNNNNNNNNNNNNNNNNNN\nmdddmmmmmmmmmmmmmmmmmmmmNmmNNNNNNNNNMNNMMMNNNmmmNNNNNNNNMMMMMMMMMNNNNNNNNNNNNNNN\nmmmmmmmmmmmmmmmmmmmmmmNNNNNNMMMNNNNNMMMMMMMMMMMMMMNNNNMMMMMMMMMMNNNNNNNNNNNNNNNN\ndmmmmmmmmmmmmmmmmmmmmmNNNNNMMMMNNNNNNNMMMMMMMMMNMNNNNNNMMMMMMNNNNNNNNNNNNNNNNNNN",3564);
+  close(fd);
 }

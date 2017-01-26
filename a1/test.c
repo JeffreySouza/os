@@ -83,5 +83,7 @@ int main(int argc, const char* argv[]) {
   convert(HEX, 98574329);
 
   printf("END TESTS\n");
+
+  draw_me();
   return 0;
 }
