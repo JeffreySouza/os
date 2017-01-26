@@ -170,7 +170,7 @@ void eltfree(struct elt *node) {
 }
 
 struct elt *name_list(void) {
-  char *name = "jeffrey";
+  const char *name = "jeffrey";
   int n = sizeof(name) / sizeof(name[0]);
 
   struct elt *prev = NULL;
