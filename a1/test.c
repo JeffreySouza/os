@@ -75,7 +75,12 @@ int main(int argc, const char* argv[]) {
 
   printf("\nConvert: ");
 
-  convert(5, 4);
+  printf("\n: 570017771\n ");
+  convert(OCT, 98574329);
+  printf("\nConvert: 101111000000001111111111001\n ");
+  convert(BIN, 98574329);
+  printf("\nConvert: 5E01FF9\n");
+  convert(HEX, 98574329);
 
   printf("END TESTS\n");
   return 0;

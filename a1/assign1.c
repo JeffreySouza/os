@@ -220,21 +220,48 @@ enum format_t {
 
 void convert(enum format_t mode, unsigned long value){
   int *output;
+  int n;
   if(mode == OCT) {
-    for(int i=0;i<22;i++) {
+    n = 22;
+    output = malloc(sizeof(int)*n);
 
+    for(int i=0;i<n;i++) {
+      output[i] = (value >> (i*3)) & 7;
     }
+
   } else if(mode == BIN) {
-    for(int i=0;i<64;i++) {
+    n = 64;
+    output = malloc(sizeof(int)*n);
 
+    for(int i=0;i<n;i++) {
+      output[i] = value >> (i) & 1;
     }
+
   } else if(mode == HEX) {
-    for(int i=0;i<16;i++) {
+    n = 16;
+    output = malloc(sizeof(int)*n);
 
+    for(int i=0;i<n;i++) {
+      output[i] = (value >> (i*4)) & 0xF;
     }
+
   } else {
+    return;
   }
-  putc(output,stdout);
+
+  for(int i = n-1; i >= 0; i--) {
+    int a = output[i];
+    if(a>9){
+      a += 55;
+    } else {
+      a += 48;
+    }
+
+    putc(a,stdout);
+  }
+  putc(10,stdout); // new line
+
+  free(output);
   return;
 }
 
