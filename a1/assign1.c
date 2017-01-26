@@ -85,7 +85,7 @@ unsigned long byte_sort(unsigned long arg) {
     bytes[i] = (arg >> (8*i)) & 0xff;
   }
 
-  intselectsort(bytes,8);
+  intselectsort(bytes,8); //sort the bytes (descending)
 
   unsigned long output = 0;
   for(int i=0; i < 8; i++) {
@@ -113,17 +113,17 @@ unsigned long byte_sort(unsigned long arg) {
  *********************************************************************/
 
 unsigned long nibble_sort(unsigned long arg) {
-  int chunks [16];
+  int nibbles[16];
   for(int i=0; i < 16; i++) {
-    chunks[i] = (arg >> (4*i)) & 0xf;
+    nibbles[i] = (arg >> (4*i)) & 0xf;
   }
 
-  intselectsort(chunks,16);
+  intselectsort(nibbles,16); //sort the nibbles (descending)
 
   unsigned long output = 0;
   for(int i=0; i < 16; i++) {
     output = output << 4;
-    output += chunks[i];
+    output += nibbles[i];
   }
 
   return output;
@@ -156,8 +156,41 @@ struct elt {
   struct elt *link;
 };
 
+void eltfree(struct elt *node) {
+  if(node == NULL) { // in case we try to clear an empty linked list
+    return;
+  }
+
+  if(node->link != NULL) {
+    eltfree(node->link); // recursively free
+  }
+
+  free(node);
+}
+
 struct elt *name_list(void) {
-  return NULL;
+  char *name = "jeffrey";
+  int n = sizeof(name) / sizeof(name[0]);
+
+  struct elt *prev = NULL;
+
+  for(int i=n-1; i>=0; i--) {
+    struct elt *new = malloc(sizeof(struct elt));
+
+    // if malloc fails
+    if(new == NULL) {
+      eltfree(prev); // free existing nodes
+      return NULL;
+    }
+
+    // initialize values of new elt
+    new->val = name[i];
+    new->link = prev;
+
+    prev = new;
+  }
+
+  return prev;
 }
 
 /*********************************************************************
@@ -186,6 +219,23 @@ enum format_t {
 };
 
 void convert(enum format_t mode, unsigned long value){
+  int *output;
+  if(mode == OCT) {
+    for(int i=0;i<22;i++) {
+
+    }
+  } else if(mode == BIN) {
+    for(int i=0;i<64;i++) {
+
+    }
+  } else if(mode == HEX) {
+    for(int i=0;i<16;i++) {
+
+    }
+  } else {
+  }
+  putc(output,stdout);
+  return;
 }
 
 /*********************************************************************

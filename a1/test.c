@@ -60,8 +60,22 @@ int main(int argc, const char* argv[]) {
 
   bytesort1();
   bytesort2();
+
   nibblesort1();
   nibblesort2();
+
+  struct elt *elt1 = name_list();
+
+  struct elt *walk = elt1;
+  while(walk != NULL){
+    printf("%c",walk->val);
+    walk = walk->link;
+  }
+  eltfree(elt1);
+
+  printf("\nConvert: ");
+
+  convert(5, 4);
 
   printf("END TESTS\n");
   return 0;
