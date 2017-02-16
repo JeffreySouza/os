@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
 
   int i;
   for (i=0; i<num_threads; ++i) {
-    pthread_create(&threads[i], NULL, &thread_start, (void*)((uintptr_t)i));
+    pthread_create(&threads[i], NULL, &thread_start, (void*)(size_t)i);
   }
 
   sleep(run_time);
