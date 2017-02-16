@@ -22,7 +22,8 @@ void lock(int pid) {
   MEMFENCE;
 
   int max = 0;
-  for (int i=0; i<num_threads; ++i) {
+  int i;
+  for (i=0; i<num_threads; ++i) {
     int ticket = tickets[i];
     max = ticket > max ? ticket : max;
   }
@@ -32,7 +33,7 @@ void lock(int pid) {
   entering[pid] = 0;
   MEMFENCE;
 
-  for (int i=0; i<num_threads; ++i) {
+  for (i=0; i<num_threads; ++i) {
     while (entering[i]) { /* nothing */ }
     MEMFENCE;
     while((tickets[i] != 0) &&
@@ -94,18 +95,19 @@ int main(int argc, char **argv) {
 
   pthread_t threads[num_threads];
 
-  for (int i=0; i<num_threads; ++i) {
+  int i;
+  for (i=0; i<num_threads; ++i) {
     pthread_create(&threads[i], NULL, &thread_start, (void*)((uintptr_t)i));
   }
 
   sleep(run_time);
   continue_running = 0;
 
-  for (int i=0; i<num_threads; ++i) {
+  for (i=0; i<num_threads; ++i) {
     pthread_join(threads[i], NULL);
   }
 
-  for (int i=0; i<num_threads; ++i) {
+  for (i=0; i<num_threads; ++i) {
     printf("Thread %d: %d\n",i,access_count[i]);
   }
   return 0;
