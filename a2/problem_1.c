@@ -62,7 +62,7 @@ void critical_section(int pid) {
 }
 
 void* thread_start(void *arg) {
-  int pid = (int)arg;
+  int pid = (int)(size_t)arg;
 
   MEMFENCE;
   while(continue_running) {
